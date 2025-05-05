@@ -13,7 +13,6 @@ def extract_coordinates(s):
     return None 
 
 model = md.vl(model="moondream-2b-int8.mf")
-# model = md.vl(model="moondream-0_5b-int8.mf")
 
 image = Image.open("2_VLM_Scenario.jpeg")
 
@@ -30,7 +29,13 @@ prompts = ["Take the scissors",  "Pick the pen" , "Move the controller", "Hold t
 
 for val in prompts:
   # Ask questions
-  answer = model.query(encoded_image, "You are an expert object detector. Please detect the item mentioned in the statement and return the pixel coordinates of its bounding box. The statment is: " + val)["answer"]
+  answer1 = model.query(encoded_image, "Please detect the item in the statement: " + val + ", and return the pixel coordinates of its bounding box.")["answer"]
+  print("Answer1:", answer1)
+  answer2 = model.query(encoded_image, "You are an expert object detector. Please detect the item mentioned in the statement and return the pixel coordinates of its bounding box. The statment is: " + val)["answer"]
+  print("Answer2:", answer2)
+  
+  answer = model.query(encoded_image, "Which bounding box best highlights the item mentioned in the statement: " + val + ". " + answer1 + " or " + answer2)["answer"]
+  
   print("Answer:", answer)
 
   cv2_image = cv2.cvtColor(cv2.imread("2_VLM_Scenario.jpeg"), cv2.COLOR_BGR2RGB)
