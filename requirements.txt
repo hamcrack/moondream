@@ -1,0 +1,3 @@
+moondream==0.0.5
+Pillow
+opencv-python
